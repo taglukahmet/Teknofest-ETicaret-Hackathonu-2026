@@ -1,0 +1,36 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.venv
+venv/
+env/
+eletrade_env/
+.env
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# Data & Model Weights (Crucial Safety Net)
+data_raw/
+*.csv
+*.parquet
+*.pt
+*.bin
+*.pth
+
+# IDEs and Code Editors
+.idea/
+.vscode/
+*.suo
+*.ntvs
+*.njsproj
+*.sln
+*.swp
+
+# Tracking Libraries
+wandb/
+.pytest_cache/

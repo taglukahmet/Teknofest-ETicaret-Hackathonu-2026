@@ -1,0 +1,16 @@
+# --- Core Deep Learning & NLP ---
+torch==2.4.0                 # PyTorch Core (will default to local hardware config)
+transformers==5.12.1         # Hugging Face Transformer Architectures
+accelerate==0.30.1           # Memory optimization for model training
+
+# --- Big Data Processing & Streaming ---
+polars==1.42.0               # Lazy execution dataframe engine
+pyarrow==16.1.0              # Memory-mapped columnar formatting
+datasets==2.19.1             # Hugging Face dataset streaming
+
+# --- Validation & Math ---
+scikit-learn==1.4.2          # GroupKFold and Metrics (F1 score)
+numpy==1.26.4                # Matrix operations
+
+# --- Tracking & MLOps ---
+wandb==0.17.0                # Weights & Biases experiment tracking
