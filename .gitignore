@@ -34,3 +34,6 @@ data_raw/
 # Tracking Libraries
 wandb/
 .pytest_cache/
+
+# Local analysis outputs
+graphify-out/
