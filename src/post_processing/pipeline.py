@@ -7,6 +7,7 @@ from typing import Any
 
 import polars as pl
 
+from src.config import config
 from src.mlops import finish_wandb_run, init_wandb_run, log_wandb_metrics
 from src.post_processing.ensemble import build_submission_frame, soft_vote_predictions
 from src.post_processing.metrics import find_optimal_threshold, macro_f1_for_threshold
@@ -67,7 +68,7 @@ def _load_labels(labels_file: str | Path, id_column: str, label_column: str) -> 
 def run_member5_pipeline(
     oof_prediction_files: list[str | Path],
     oof_labels_file: str | Path,
-    output_dir: str | Path,
+    output_dir: str | Path = config.OUTPUT_DIR,
     test_prediction_files: list[str | Path] | None = None,
     id_column: str = "id",
     label_column: str = "label",

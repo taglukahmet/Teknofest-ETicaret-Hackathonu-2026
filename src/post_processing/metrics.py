@@ -1,6 +1,8 @@
 import numpy as np
 from sklearn.metrics import f1_score
 
+from src.config import config
+
 
 def probabilities_to_labels(probabilities: np.ndarray, threshold: float) -> np.ndarray:
     """
@@ -74,14 +76,14 @@ def find_optimal_threshold(
 
     thresholds = np.arange(min_threshold, max_threshold + step / 2, step)
 
-    best_threshold = 0.50
+    best_threshold = config.DEFAULT_THRESHOLD
     best_score = -1.0
     best_distance_from_default = float("inf")
 
     for threshold in thresholds:
         score = macro_f1_for_threshold(probabilities, labels, float(threshold))
 
-        distance_from_default = abs(float(threshold) - 0.50)
+        distance_from_default = abs(float(threshold) - config.DEFAULT_THRESHOLD)
         is_better = score > best_score
         is_stable_tie = np.isclose(score, best_score) and (
             distance_from_default < best_distance_from_default
