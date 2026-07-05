@@ -28,7 +28,7 @@ def macro_f1_for_threshold(
     """
     Scores one threshold with the competition metric: Macro-F1.
     """
-    labels = np.asarray(true_labels, dtype=int).reshape(-1)
+    labels = np.asarray(true_labels).reshape(-1)
     predictions = probabilities_to_labels(probabilities, threshold)
 
     if predictions.shape[0] != labels.shape[0]:
@@ -36,7 +36,7 @@ def macro_f1_for_threshold(
     if not np.isin(labels, [0, 1]).all():
         raise ValueError("true_labels must contain only 0 and 1 values.")
 
-    return float(f1_score(labels, predictions, average="macro", zero_division=0))
+    return float(f1_score(labels.astype(int), predictions, average="macro", zero_division=0))
 
 
 def find_optimal_threshold(
@@ -61,12 +61,14 @@ def find_optimal_threshold(
         The threshold that gives the best Macro-F1 score.
     """
     probabilities = np.asarray(oof_probabilities, dtype=float).reshape(-1)
-    labels = np.asarray(true_labels, dtype=int).reshape(-1)
+    labels = np.asarray(true_labels).reshape(-1)
 
     if probabilities.shape[0] != labels.shape[0]:
         raise ValueError("oof_probabilities and true_labels must have the same length.")
     if probabilities.size == 0:
         raise ValueError("oof_probabilities and true_labels cannot be empty.")
+    if not np.isfinite(probabilities).all():
+        raise ValueError("oof_probabilities must contain only finite numeric values.")
     if not np.isin(labels, [0, 1]).all():
         raise ValueError("true_labels must contain only 0 and 1 values.")
     if not 0 <= min_threshold <= max_threshold <= 1:
@@ -74,6 +76,7 @@ def find_optimal_threshold(
     if step <= 0:
         raise ValueError("step must be greater than 0.")
 
+    labels = labels.astype(int)
     thresholds = np.arange(min_threshold, max_threshold + step / 2, step)
 
     best_threshold = config.DEFAULT_THRESHOLD
@@ -81,7 +84,8 @@ def find_optimal_threshold(
     best_distance_from_default = float("inf")
 
     for threshold in thresholds:
-        score = macro_f1_for_threshold(probabilities, labels, float(threshold))
+        predictions = (probabilities >= threshold).astype(int)
+        score = float(f1_score(labels, predictions, average="macro", zero_division=0))
 
         distance_from_default = abs(float(threshold) - config.DEFAULT_THRESHOLD)
         is_better = score > best_score
